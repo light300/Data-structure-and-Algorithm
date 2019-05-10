@@ -103,6 +103,102 @@ int RMax(struct Node *p)
 	return x > p->data ? x:p->data;
 }
 
+struct Node *Lsearch(struct Node *p, int key)
+{
+	struct Node *q = NULL;
+	while (p != NULL) {
+		if (key == p->data)
+		{
+			q->next = p->next;
+			p->next = first;
+			first = p;
+			return p;
+		}
+		q = p;
+		p = p->next;
+	}
+	return NULL;
+}
+
+struct Node *RLsearch(struct Node *p, int key)
+{
+	if (p == NULL)
+		return NULL;
+	if (key == p->data)
+		return p;
+	return RLsearch(p->next, key);
+}
+
+void Insert(struct Node *p, int index, int x)
+{
+	struct Node *t;
+	int i;
+
+	if (index < 0 || index > count(p))
+		return;
+	t = (struct Node *)malloc(sizeof(struct Node));
+	t->data = x;
+
+	if (index == 0) {
+		t->next = first;
+		first = t;
+	} else {
+		for (i=0 ; i<index-1 ; i++)
+			p = p->next;
+		t->next = p->next;
+		p->next = t;
+	}
+}
+
+void SortedInsert(struct Node *p, int x)
+{
+	struct Node *t, *q=NULL;
+	t = (struct Node *)malloc(sizeof(struct Node));
+	t->data = x;
+	t->next = NULL;
+
+	if (first == NULL) {
+		first = t;
+	} else {
+		while (p && p->data < x) {
+			q = p;
+			p = p->next;
+		}
+		if (p == first) {
+			t->next = first;
+			first = t;
+		} else {
+			t->next = q->next;
+			q->next = t;
+		}
+	}
+}
+
+int Delete(struct Node *p, int index)
+{
+	struct Node *q;
+	int x = -1, i;
+
+	if (index < 1 || index > count(p))
+		return -1;
+	if (index == 1) {
+		q = first;
+		x = first->data;
+		first = first->next;
+		free(q);
+		return x;
+	} else {
+		for (i=0 ; i<index-1 && p ; i++ ) {
+			q = p;
+			p = p->next;
+		}
+		q->next = p->next;
+		x = p->data;
+		free(p);
+		return x;
+	}
+}
+
 int main()
 {
 	int A[] = {3,5,7,10,15};
@@ -125,6 +221,33 @@ int main()
 
 	printf("Maximum numbe in linked list is %d\n", Max(first));
 	printf("Maximum numbe in linked list is %d\n", RMax(first));
+
+	struct Node *temp;
+	//temp = Lsearch(first, 10);
+	//if (temp)
+//		printf("Key is found: %d\n", temp->data);
+//	else
+//		printf("Key is not found.\n");
+
+    temp = RLsearch(first, 7);
+	if (temp)
+		printf("Key is found: %d\n", temp->data);
+	else
+		printf("Key is not found.\n");
+
+	Display(first);
+	
+	//Insert(first, 0, 30);
+	//Display(first);
+
+	//Insert(first, 3, 25);
+	//Display(first);
+
+	SortedInsert(first, 9);
+	Display(first);
+	
+	printf("Deleted Element %d\n", Delete(first, 4));
+	Display(first);
 
 	return 0;
 }
