@@ -6,17 +6,21 @@ struct Node
 {
 	int data;
 	struct Node *next;
-}*first=NULL;
+}*first=NULL, *second=NULL, *third=NULL;
 
-void create(int A[], int n)
+void create(struct Node *p, int A[], int n)
 {
 	int i;
 	struct Node *t, *last;
 
-	first = (struct Node *)malloc(sizeof(struct Node));
+	/*first = (struct Node *)malloc(sizeof(struct Node));
 	first->data = A[0];
 	first->next = NULL;
-	last = first;
+	last = first;*/
+	//p = (struct Node *)malloc(sizeof(struct Node));
+	p->data = A[0];
+	p->next = NULL;
+	last = p;
 
 	for (i=1 ; i<n ; i++) {
 		t = (struct Node *)malloc(sizeof(struct Node));
@@ -199,16 +203,148 @@ int Delete(struct Node *p, int index)
 	}
 }
 
+int isSorted(struct Node *p)
+{
+	int x = -65536;
+	
+	while (p != NULL) {
+		if (p->data < x)
+			return 0;
+		x = p->data;
+		p = p->next;
+	}
+	return 1;
+}
+
+void RemoveDuplicate(struct Node *p)
+{
+	struct Node *q;
+	q = p->next;
+
+	while(q != NULL) {
+		if (p->data != q->data) {
+			p = q;
+			q = q->next;
+		} else {
+			p->next = q->next;
+			free(q);
+			q = p->next;
+		}
+	}
+}
+
+void Reverse1(struct Node *p)
+{
+	int *A, i=0;
+	struct Node *q = p;
+	A = (int *)malloc(sizeof(int) * count(p));
+
+	while (q != NULL) {
+		A[i] = q->data;
+		q = q->next;
+		i++;
+	}
+	q = p;
+	i--;
+	while (q != NULL) {
+		q->data = A[i];
+		q = q->next;
+		i--;
+	}
+}
+
+void Reverse2(struct Node *p)
+{
+	struct Node *q = NULL;
+	struct Node *r = NULL;
+
+	while (p != NULL) {
+		r = q;
+		q = p;
+		p = p->next;
+		q->next = r;
+	}
+	first = q;
+}
+
+void Reverse3(struct Node *q, struct Node *p)
+{
+	if (p) {
+		Reverse3(p, p->next);
+		p->next = q;
+	} else {
+		first = q;
+	}
+}
+
+void Conact(struct Node *p, struct Node *q)
+{
+	third = p;
+
+	while (p->next != NULL) {
+		p = p->next;
+	}
+	p->next = q;
+}
+
+void Merge(struct Node *p, struct Node *q)
+{
+	struct Node *last;
+	if (p->data < q->data) {
+		third = last = p;
+		p = p->next;
+		third->next = NULL;
+	} else {
+		third = last = q;
+		q = q->next;
+		third->next = NULL;
+	}
+	while (p && q) {
+		if (p->data < q->data) {
+			last->next = p;
+			last = p;
+			p = p->next;
+			last->next = NULL;
+		} else {
+			last->next = q;
+			last = q;
+			q = q->next;
+			last->next = NULL;
+		}
+	}
+	if (p) last->next = p;
+	if (q) last->next = q;
+}
+
+int isLoop(struct Node *f)
+{
+	struct Node *p, *q;
+	p = q = f;
+
+	do {
+		p = p->next;
+		q = q->next;
+		q = q!=NULL ? q->next:q;
+	} while(p && q && p!=q);
+	if (p == q)
+		return 1;
+	else
+		return 0;
+}
+
 int main()
 {
-	int A[] = {3,5,7,10,15};
-
+	int A[] = {10,20,30,40,50};
+    int B[] = {5,15,25,35,45};
 	//create function: input Array and number of Array elements which will create a linked list data type array
-	create(A, 5);
+	first = (struct Node *)malloc(sizeof(struct Node));
+	create(first, A, 5);
+	second = (struct Node *)malloc(sizeof(struct Node));
+	create(second, B, 5);
 
 	//display function will display all data in linked list
 	Display(first);
-
+	Display(second);
 	//Using recursion method to display function will display all data in linked list
 	RDisplay(first);
 	printf("\n");
@@ -243,11 +379,37 @@ int main()
 	//Insert(first, 3, 25);
 	//Display(first);
 
-	SortedInsert(first, 9);
-	Display(first);
+	//SortedInsert(first, 9);
+	//Display(first);
 	
 	printf("Deleted Element %d\n", Delete(first, 4));
 	Display(first);
+
+	printf("Is Linked list sort? %d\n", isSorted(first));
+
+    RemoveDuplicate(first);
+    Display(first);
+
+	// 3 methods to implement reverse the linked list
+	//Reverse1(first);
+    //Display(first);
+	//Reverse2(first);
+    //Display(first);
+	//Reverse3(NULL, first);
+    //Display(first);
+	
+	printf("Conact or Merge\n");
+	//Conact(first, second);
+	Merge(first, second);
+	Display(third);
+	
+	// check the linked list is loop or not
+	struct Node *t1, *t2;
+	t1 = first->next->next;
+	t2 = first->next->next->next->next;
+	t2->next = t1;
+
+	printf("Is loop? %d\n", isLoop(first));
 
 	return 0;
 }
