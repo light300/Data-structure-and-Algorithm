@@ -5,23 +5,26 @@ struct Node
 {
 	int data;
 	struct Node *next;
+	struct Node *prev;
 }*Head;
 
 void create(int A[],int n)
 {
 	int i;
 	struct Node *t,*last;
-	Head=(struct Node*)malloc(sizeof(struct Node));
-	Head->data=A[0];
-	Head->next=Head;
-	last=Head;
+	Head = (struct Node*)malloc(sizeof(struct Node));
+	Head->data = A[0];
+	Head->next = Head;
+	Head->prev = Head;
+	last = Head;
 	  
 	for(i=1;i<n;i++) {
-		t=(struct Node*)malloc(sizeof(struct Node));
-	  	t->data=A[i];
-	  	t->next=last->next;
-	  	last->next=t;
-	  	last=t;
+		t = (struct Node*)malloc(sizeof(struct Node));
+	  	t->data = A[i];
+	  	t->next = last->next;
+		t->prev = last;
+	  	last -> next = t;
+	  	last = t;
 	}
 }
 
@@ -35,25 +38,14 @@ void create(int A[],int n)
 	printf("\n");
 }
 
-void RDisplay(struct Node *h)
-{
-	static int flag=0;
-	if(h!=Head || flag==0) {
-		flag=1;
-		printf("%d ",h->data);
- 		RDisplay(h->next);
-	}
-	flag=0;
-}
-
 int Length(struct Node *p)
 {
     int len=0;
 	do
 	{
 		len++;
-		p=p->next;
-	}while(p!=Head);
+		p = p->next;
+	}while(p != Head);
 	return len;
 }
 
@@ -65,27 +57,30 @@ void Insert(struct Node *p,int index, int x)
 		return;
 	if(index==0)
 	{
-		t=(struct Node *)malloc(sizeof(struct Node));
-		t->data=x;
+		t = (struct Node *)malloc(sizeof(struct Node));
+		t->data = x;
 		if(Head==NULL)
 		{
-			Head=t;
-			Head->next=Head;
+			Head = t;
+			Head->next = Head;
+			Head->prev = Head;
 		}
 		else
 		{
-			while(p->next!=Head)p=p->next;
-			p->next=t;
-			t->next=Head;
-			Head=t;
+			while(p->next != Head) p=p->next;
+			p->next = t;
+			t->prev = p;
+			t->next = Head;
+			Head = t;
 		}
 	}
 	else
 	{
-		for(i=0;i<index-1;i++)p=p->next;
+		for(i=0 ; i<index-1 ; i++) p=p->next;
 		t=(struct Node *)malloc(sizeof(struct Node));
-		t->data=x;
-		t->next=p->next;
+		t->data = x;
+		t->next = p->next;
+		t->prev = p;
 	}
 	p->next=t;
 }
@@ -107,18 +102,20 @@ int Delete(struct Node *p,int index)
 		}
 		else
 		{
-			p->next=Head->next;
+			p->next = Head->next;
+			p->next->prev = Head->prev;
 			free(Head);
-			Head=p->next;
+			Head = p->next;
 		}
 	}
 	else
 	{
 		for(i=0;i<index-2;i++)
-			p=p->next;
-		q=p->next;
-		p->next=q->next;
-		x=q->data;
+			p = p->next;
+		q = p->next;
+		p->next = q->next;
+		p->next->prev = q->prev;
+		x = q->data;
 		free(q);
 	}
 	return x;
@@ -128,9 +125,12 @@ int main()
 {
     int A[]={2,3,4,5,6};
 	create(A,5);
-	Delete(Head,4);
+	Delete(Head,1);
 	Display(Head);
 	Insert(Head, 3, 4);
 	Display(Head);
+	Insert(Head, 0, 1);
+	Display(Head);
+
 	return 0;
 }

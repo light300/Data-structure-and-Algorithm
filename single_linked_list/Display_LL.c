@@ -332,6 +332,20 @@ int isLoop(struct Node *f)
 		return 0;
 }
 
+void Mider(struct Node *p)
+{
+	// Another way is using stack
+	struct Node *q;
+	q = p;
+	while(q) {
+		printf("%d\n", q->data);
+		q = q->next;
+		if(q) q = q->next;
+		if(q) p = p->next;
+	}
+	printf("Mid is %d\n", p->data);
+}
+
 int main()
 {
 	int A[] = {10,20,30,40,50};
@@ -404,12 +418,14 @@ int main()
 	Display(third);
 	
 	// check the linked list is loop or not
-	struct Node *t1, *t2;
+	/*struct Node *t1, *t2;
 	t1 = first->next->next;
 	t2 = first->next->next->next->next;
-	t2->next = t1;
+	t2->next = t1;*/
 
 	printf("Is loop? %d\n", isLoop(first));
+
+	Mider(first);
 
 	return 0;
 }
