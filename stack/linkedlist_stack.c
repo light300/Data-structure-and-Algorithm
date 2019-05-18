@@ -24,7 +24,7 @@ void push(int x)
 int pop()
 {
 	struct Node *t;
-	int x;
+	int x = -1;
 
 	if(top == NULL)
 		printf("Stack is Empty\n");
