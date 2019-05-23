@@ -71,6 +71,49 @@ void Postorder(struct Node *p)
 	}
 }
 
+int count(struct Node *root)
+{
+	if(root)
+		return count(root->lchild) + count(root->rchild) + 1;
+	return 0;
+}
+
+int height(struct Node *root)
+{
+	int x=0, y=0;
+
+	if(root==NULL)
+		return 0;
+	x = height(root->lchild);
+	y = height(root->rchild);
+	if(x>y)
+		return x+1;
+	else
+		return y+1;
+}
+
+int count_node(struct Node *p)
+{
+	int x=0, y=0;
+
+	if(p != NULL) {
+		x = count_node(p->lchild);
+		y = count_node(p->rchild);
+		//all node
+		if (p->lchild == NULL && p->rchild == NULL)
+		/*
+		if (p->lchild != NULL && p->rchild != NULL) //leaf
+		if (p->lchild  && p->rchild) //degree 2
+		if (p->lchild || p->rchild) //degree 1 or 2
+		if (p->lchild != NULL ^ p->rchild != NULL) //degree 1
+		*/
+			return x + y + 1;
+		else
+			return x + y;
+	}
+		return 0;
+}
+
 int main()
 {
 	Tree_create();
@@ -84,6 +127,11 @@ int main()
 	printf("Postorder\n");
 	Postorder(root);
 	printf("\n");
+
+	printf("Count is %d\n", count(root));
+	printf("Height is %d\n", height(root));
     
+	printf("Count node is %d\n", count_node(root));
+	
 	return 0;
 }
