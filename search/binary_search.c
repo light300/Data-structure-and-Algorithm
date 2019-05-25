@@ -170,9 +170,13 @@ void CreatePre(int pre[], int n)
 				p = pop(&stk);
 				
 				if (!isEmptyStack(stk)) {
-					if (pre[i] > p->data && pre[i] > stackTop(stk)->data) {
+					while (pre[i] > p->data && pre[i] > stackTop(stk)->data) {
 						p = pop(&stk);
 						printf("stack pop: %d\n", p->data);
+
+						if (isEmptyStack(stk)){
+							break;
+						}
 					}
 				}
 
@@ -216,9 +220,9 @@ int main()
 		printf("Element is not found\n");
 #endif
 
-	int pre[] = {30, 20, 10, 15, 25, 40, 50, 45};
+	int pre[] = {30, 20, 10, 5, 40, 50};
 
-	CreatePre(pre, 8);
+	CreatePre(pre, 6);
 	Inorder(root);
 	printf("\n");
 	
