@@ -168,6 +168,14 @@ void CreatePre(int pre[], int n)
 				p = t;
 			} else {
 				p = pop(&stk);
+				
+				if (!isEmptyStack(stk)) {
+					if (pre[i] > p->data && pre[i] > stackTop(stk)->data) {
+						p = pop(&stk);
+						printf("stack pop: %d\n", p->data);
+					}
+				}
+
 				t = (struct Node *)malloc(sizeof(struct Node));
 				t->data = pre[i++];
 				t->lchild = t->rchild = NULL;
