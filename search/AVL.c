@@ -60,7 +60,7 @@ struct Node *LRrotation(struct Node *p)
 	p->heigh = Nodeheigh(p);
 	plr->heigh = Nodeheigh(plr);
 
-	if (root = p)
+	if (root == p)
 		root = plr;
 
 	return plr;
@@ -77,7 +77,7 @@ struct Node *RRrotation(struct Node *p)
 	p->heigh = Nodeheigh(p);
 	pr->heigh = Nodeheigh(pr);
 
-	if (root = p)
+	if (root == p)
 		root = pr;
 
 	return pr;
@@ -145,9 +145,12 @@ void Inorder(struct Node *p)
 
 int main()
 {
-	root = Rinsert(root, 5);
-	Rinsert(root, 10);
-	Rinsert(root, 8);
+	root = Rinsert(root, 10);
+	Rinsert(root, 20);
+	Rinsert(root, 30);
+	Rinsert(root, 25);
+	Rinsert(root, 28);
+	Rinsert(root, 27);
 
 	Inorder(root);
 	printf("\n");
