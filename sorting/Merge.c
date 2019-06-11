@@ -8,42 +8,61 @@ void swap(int *x,int *y)
    *y = temp;
 }
 
-void Merge(int A[],int l,int mid,int h)
-{
-	int i, j, k;
-	int B[20]={0};
-	i = l;
-	j = mid + 1;
-	k = l;
+//reference https://www.geeksforgeeks.org/iterative-merge-sort/
 
-	while(i<=mid && j<=h) {
-		if(A[i]<A[j])
-			B[k++] = A[i++];
-		else
-			B[k++] = A[j++];
-	}
-	for(;i<=mid;i++)
-	    B[k++] = A[i];
-	for(;j<=h;j++)
-		B[k++] = A[j];
-	for(i=l;i<=h;i++)
-		A[i] = B[i];
-}
-
-void IMergeSort(int A[],int n)
+void merge(int arr[], int l, int m, int r)
 {
-	int p,l,h,mid,i;
-     
-	for(p=2;p<=n;p=p*2) {
-		for(i=0;i+p-1<=n;i=i+p) {
-			l = i;
-			h = i + p - 1;
-			mid = (l+h) / 2;
-			Merge(A, l, mid, h);
+    int i, j, k;
+	int n1 = m - l + 1;
+	int n2 =  r - m;
+			    
+	/* create temp arrays */
+	int L[n1], R[n2];
+						    
+	/* Copy data to temp arrays L[] and R[] */
+	for (i = 0; i < n1; i++)
+		L[i] = arr[l + i];
+	for (j = 0; j < n2; j++)
+		R[j] = arr[m + 1+ j];
+														
+	/* Merge the temp arrays back into arr[l..r]*/
+	i = 0; // Initial index of first subarray
+	j = 0; // Initial index of second subarray
+	k = l; // Initial index of merged subarray
+
+	while (i < n1 && j < n2) {
+		if (L[i] <= R[j]) {
+			arr[k++] = L[i++];
+		} else {
+			arr[k++] = R[j++];
 		}
 	}
-	if(p/2 < n)
-		Merge(A, 0, p/2 - 1, n);
+
+	/* Copy the remaining elements of L[], if there are any */
+	while (i < n1) {
+		arr[k++] = L[i++];
+	}
+
+	/* Copy the remaining elements of R[], if there are any */
+	while (j < n2) {
+		arr[k++] = R[j++];
+	}
+}
+
+/* l is for left index and r is right index of the
+ sub-array of arr to be sorted */
+void mergeSort(int arr[], int l, int r)
+{
+	if (l < r) {
+	// Same as (l+r)/2, but avoids overflow for large l and h
+	int m = l+(r-l)/2;
+								
+	// Sort first and second halves
+	mergeSort(arr, l, m);
+	mergeSort(arr, m+1, r);
+
+	merge(arr, l, m, r);
+	}
 }
 
 int main()
@@ -52,7 +71,7 @@ int main()
 	int n = 11;
 	int i = 0;
 
-	IMergeSort(a, n);
+	mergeSort(a, 0, n-1);
 
 	for(i = 0;i < n;i++) {
 		printf("%d ", a[i]);
