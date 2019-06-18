@@ -8,9 +8,15 @@ quick:
 		gcc Quick.c -g -o quick.out
 merge:
 		gcc Merge.c -g -o merge.out
+count:
+		gcc Count.c -g -o count.out
+shell:
+		gcc Shell.c -g -o shell.out
 clean:
 	rm bubble.out
 	rm insert.out
 	rm selection.out
 	rm quick.out
 	rm merge.out
+	rm count.out
+	rm shell.out
