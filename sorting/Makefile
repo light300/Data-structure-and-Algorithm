@@ -12,8 +12,11 @@ count:
 		gcc Count.c -g -o count.out
 shell:
 		gcc Shell.c -g -o shell.out
+bucket:
+		gcc Bucket.c -g -o bucket.out
 clean:
 	rm bubble.out
+	rm bucket.out
 	rm insert.out
 	rm selection.out
 	rm quick.out
