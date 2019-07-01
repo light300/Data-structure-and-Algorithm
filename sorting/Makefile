@@ -14,6 +14,8 @@ shell:
 		gcc Shell.c -g -o shell.out
 bucket:
 		gcc Bucket.c -g -o bucket.out
+radix:
+		gcc Radix.c -g -o radix.out
 clean:
 	rm bubble.out
 	rm bucket.out
@@ -23,3 +25,4 @@ clean:
 	rm merge.out
 	rm count.out
 	rm shell.out
+	rm radix.out
