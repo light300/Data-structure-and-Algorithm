@@ -16,6 +16,8 @@ bucket:
 		gcc Bucket.c -g -o bucket.out
 radix:
 		gcc Radix.c -g -o radix.out
+radixlist:
+		gcc Radix_linkedlist.c -g -o radixlist.out
 clean:
 	rm bubble.out
 	rm bucket.out
@@ -26,3 +28,4 @@ clean:
 	rm count.out
 	rm shell.out
 	rm radix.out
+	rm radixlist.out
